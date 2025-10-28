@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PSDROA Membership Form</title>
+  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .form-container {
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .form-group {
+      margin-bottom: 15px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    input[type="text"], input[type="email"], select {
+      width: 100%;
+      padding: 8px;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      box-sizing: border-box;
+    }
+    button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #45a049;
+    }
+    .hidden {
+      display: none;
+    }
+    .credits {
+      margin-top: 20px;
+      font-size: 0.9em;
+      color: #555;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+
+<div class="form-container">
+  <h3>PSDROA Membership Form</h3>
+  <form id="membershipForm">
+    <div class="form-group">
+      <label>Are you a student of Amity Private School, Sharjah? <span style="color:red">*</span></label>
+      <select id="isStudent" required>
+        <option value="">Select</option>
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+      </select>
+    </div>
+
+    <div class="form-group hidden" id="studentIdGroup">
+      <label>Student ID <span style="color:red">*</span>:</label>
+      <input type="text" id="studentId" placeholder="Enter your student ID" required>
+    </div>
+
+    <div class="form-group hidden" id="emailGroup">
+      <label>School Email <span style="color:red">*</span>:</label>
+      <input type="email" id="schoolEmail" placeholder="Enter your school email" required>
+    </div>
+
+    <div class="form-group hidden" id="gradeGroup">
+      <label>Grade <span style="color:red">*</span>:</label>
+      <input type="text" id="grade" placeholder="Enter your grade" required>
+    </div>
+
+    <div class="form-group hidden" id="sectionGroup">
+      <label>Section <span style="color:red">*</span>:</label>
+      <input type="text" id="section" placeholder="Enter your section" required>
+    </div>
+
+    <button type="submit" class="hidden" id="submitBtn">Submit</button>
+  </form>
+
+  <div class="credits">
+    &copy; PSDROA – Peoples Socialist Democratic Republic of Amityans
+  </div>
+</div>
+
+<script>
+  // Initialize EmailJS
+  emailjs.init("vScrhrDPujPCc5CvP");
+
+  const isStudent = document.getElementById("isStudent");
+  const studentIdGroup = document.getElementById("studentIdGroup");
+  const emailGroup = document.getElementById("emailGroup");
+  const gradeGroup = document.getElementById("gradeGroup");
+  const sectionGroup = document.getElementById("sectionGroup");
+  const submitBtn = document.getElementById("submitBtn");
+
+  isStudent.addEventListener("change", () => {
+    if (isStudent.value === "yes") {
+      studentIdGroup.classList.remove("hidden");
+    } else {
+      alert("Only students of Amity Private School, Sharjah can apply.");
+      studentIdGroup.classList.add("hidden");
+      emailGroup.classList.add("hidden");
+      gradeGroup.classList.add("hidden");
+      sectionGroup.classList.add("hidden");
+      submitBtn.classList.add("hidden");
+    }
+  });
+
+  const studentIdInput = document.getElementById("studentId");
+  studentIdInput.addEventListener("input", () => {
+    if (studentIdInput.value.startsWith("S0")) {
+      emailGroup.classList.remove("hidden");
+      gradeGroup.classList.remove("hidden");
+      sectionGroup.classList.remove("hidden");
+      submitBtn.classList.remove("hidden");
+    } else {
+      emailGroup.classList.add("hidden");
+      gradeGroup.classList.add("hidden");
+      sectionGroup.classList.add("hidden");
+      submitBtn.classList.add("hidden");
+    }
+  });
+
+  document.getElementById("membershipForm").addEventListener("submit", function(e) {
+    e.preventDefault();
+
+    // Check that all visible fields are filled
+    const requiredFields = [studentIdInput, document.getElementById("schoolEmail"), document.getElementById("grade"), document.getElementById("section")];
+    for (const field of requiredFields) {
+      if (field.offsetParent !== null && field.value.trim() === "") {
+        alert("Please fill in all fields before submitting.");
+        field.focus();
+        return;
+      }
+    }
+
+    const templateParams = {
+      student_id: studentIdInput.value,
+      email: document.getElementById("schoolEmail").value,
+      grade: document.getElementById("grade").value,
+      section: document.getElementById("section").value
+    };
+
+    emailjs.send('service_kl2pqa8', 'template_9gor05g', templateParams)
+      .then(function(response) {
+         alert("Membership application submitted successfully!");
+         document.getElementById("membershipForm").reset();
+         studentIdGroup.classList.add("hidden");
+         emailGroup.classList.add("hidden");
+         gradeGroup.classList.add("hidden");
+         sectionGroup.classList.add("hidden");
+         submitBtn.classList.add("hidden");
+      }, function(error) {
+         alert("Failed to submit. Please try again.");
+      });
+  });
+</script>
+
+</body>
+</html>
