@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PSDROA Membership Application</title>
+  <title>PSDROA Membership Form</title>
   <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
   <style>
     body {
@@ -16,7 +16,7 @@
     }
 
     .container {
-      background-color: rgba(0, 0, 0, 0.8);
+      background-color: rgba(0, 0, 0, 0.85);
       padding: 30px;
       border-radius: 12px;
       max-width: 480px;
@@ -25,32 +25,34 @@
     }
 
     img.logo {
-      width: 180px;
-      margin-bottom: 15px;
+      width: 160px;
       border-radius: 8px;
+      margin-bottom: 15px;
     }
 
     h1 {
       color: gold;
-      margin-bottom: 20px;
       font-size: 22px;
+      margin-bottom: 20px;
       letter-spacing: 1px;
     }
 
     label {
       display: block;
-      margin-top: 15px;
       text-align: left;
+      margin-top: 15px;
       color: #ccc;
+      font-weight: 500;
     }
 
     input, select, button {
       width: 100%;
       padding: 10px;
-      margin-top: 5px;
+      margin-top: 6px;
       border-radius: 6px;
       border: none;
       font-size: 15px;
+      box-sizing: border-box;
     }
 
     input, select {
@@ -64,7 +66,7 @@
       font-weight: bold;
       cursor: pointer;
       transition: 0.3s;
-      margin-top: 20px;
+      margin-top: 25px;
     }
 
     button:hover {
@@ -73,8 +75,15 @@
 
     .credits {
       font-size: 12px;
-      color: #999;
+      color: #aaa;
       margin-top: 25px;
+    }
+
+    @media (max-width: 600px) {
+      .container {
+        margin: 20px;
+        padding: 20px;
+      }
     }
   </style>
 </head>
@@ -82,7 +91,7 @@
 
   <div class="container">
     <img src="IMG_0508.jpeg" alt="PSDROA Logo" class="logo">
-    <h1>PSDROA Membership Application Form</h1>
+    <h1>PSDROA Membership Application</h1>
 
     <form id="psdroaForm">
       <label>Are you a student of Amity Private School Sharjah?</label>
@@ -92,7 +101,10 @@
         <option value="no">No</option>
       </select>
 
-      <div id="formFields" style="display:none;">
+      <div id="extraFields" style="display:none;">
+        <label>Full Name</label>
+        <input type="text" id="name" placeholder="Enter your full name" required>
+
         <label>Student ID (must start with S0)</label>
         <input type="text" id="studentId" placeholder="e.g. S01234" required>
 
@@ -116,42 +128,47 @@
   </div>
 
   <script>
-    (function(){
-      emailjs.init("vScrhrDPujPCc5CvP"); // Public Key
+    // Initialize EmailJS
+    (function() {
+      emailjs.init("vScrhrDPujPCc5CvP"); // Public key
     })();
 
     const amitySelect = document.getElementById("amityCheck");
-    const formFields = document.getElementById("formFields");
+    const extraFields = document.getElementById("extraFields");
     const form = document.getElementById("psdroaForm");
 
-    amitySelect.addEventListener("change", () => {
-      if (amitySelect.value === "yes") {
-        formFields.style.display = "block";
+    // Show or block form based on school selection
+    amitySelect.addEventListener("change", function() {
+      if (this.value === "yes") {
+        extraFields.style.display = "block";
       } else {
-        formFields.style.display = "none";
-        alert("Sorry, only Amity Private School Sharjah students can apply for PSDROA membership.");
+        extraFields.style.display = "none";
+        alert("Sorry — only students from Amity Private School Sharjah can apply for PSDROA membership.");
       }
     });
 
+    // Handle form submission
     form.addEventListener("submit", function(e) {
       e.preventDefault();
 
       const studentId = document.getElementById("studentId").value.trim();
+      const name = document.getElementById("name").value.trim();
       const email = document.getElementById("email").value.trim();
       const grade = document.getElementById("grade").value.trim();
       const section = document.getElementById("section").value.trim();
 
       if (!studentId.startsWith("S0")) {
-        alert("Invalid ID.);
+        alert("Invalid ID. Your Student ID must start with 'S0'.");
         return;
       }
 
-      if (!email || !grade || !section) {
+      if (!name || !email || !grade || !section) {
         alert("Please fill in all fields before submitting.");
         return;
       }
 
       const templateParams = {
+        student_name: name,
         student_id: studentId,
         email: email,
         grade: grade,
@@ -159,15 +176,16 @@
       };
 
       emailjs.send("service_kl2pqa8", "template_9gor05g", templateParams)
-      .then(() => {
-        alert("Your application has been submitted successfully. Thank you!");
-        form.reset();
-        formFields.style.display = "none";
-        amitySelect.value = "";
-      }, (error) => {
-        console.error("EmailJS error:", error);
-        alert("There was an error sending your application. Please try again later.");
-      });
+        .then(() => {
+          alert("Your PSDROA Membership Application has been submitted successfully!");
+          form.reset();
+          extraFields.style.display = "none";
+          amitySelect.value = "";
+        })
+        .catch((error) => {
+          console.error("EmailJS error:", error);
+          alert("There was an error submitting your application. Please try again later.");
+        });
     });
   </script>
 </body>
