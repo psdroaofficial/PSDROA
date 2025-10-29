@@ -3,173 +3,172 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PSDROA Membership Form</title>
+  <title>PSDROA Membership Application</title>
   <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      max-width: 800px;
-      margin: 0 auto;
-      padding: 20px;
+      font-family: system-ui, sans-serif;
+      background: linear-gradient(135deg, #111, #222);
+      color: #f2f2f2;
+      margin: 0;
+      padding: 0;
+      text-align: center;
     }
-    .form-container {
-      background-color: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+
+    .container {
+      background-color: rgba(0, 0, 0, 0.8);
+      padding: 30px;
+      border-radius: 12px;
+      max-width: 480px;
+      margin: 40px auto;
+      box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
     }
-    .form-group {
+
+    img.logo {
+      width: 180px;
       margin-bottom: 15px;
+      border-radius: 8px;
     }
+
+    h1 {
+      color: gold;
+      margin-bottom: 20px;
+      font-size: 22px;
+      letter-spacing: 1px;
+    }
+
     label {
       display: block;
-      margin-bottom: 5px;
-      font-weight: bold;
+      margin-top: 15px;
+      text-align: left;
+      color: #ccc;
     }
-    input[type="text"], input[type="email"], select {
+
+    input, select, button {
       width: 100%;
-      padding: 8px;
-      border: 1px solid #ddd;
-      border-radius: 4px;
-      box-sizing: border-box;
-    }
-    button {
-      background-color: #4CAF50;
-      color: white;
-      padding: 10px 20px;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 6px;
       border: none;
-      border-radius: 4px;
+      font-size: 15px;
+    }
+
+    input, select {
+      background-color: #333;
+      color: #fff;
+    }
+
+    button {
+      background-color: gold;
+      color: #111;
+      font-weight: bold;
       cursor: pointer;
-    }
-    button:hover {
-      background-color: #45a049;
-    }
-    .hidden {
-      display: none;
-    }
-    .credits {
+      transition: 0.3s;
       margin-top: 20px;
-      font-size: 0.9em;
-      color: #555;
-      text-align: center;
+    }
+
+    button:hover {
+      background-color: #d4af37;
+    }
+
+    .credits {
+      font-size: 12px;
+      color: #999;
+      margin-top: 25px;
     }
   </style>
 </head>
 <body>
 
-<div class="form-container">
-  <h3>PSDROA Membership Form</h3>
-  <form id="membershipForm">
-    <div class="form-group">
-      <label>Are you a student of Amity Private School, Sharjah? <span style="color:red">*</span></label>
-      <select id="isStudent" required>
-        <option value="">Select</option>
+  <div class="container">
+    <img src="IMG_0508.jpeg" alt="PSDROA Logo" class="logo">
+    <h1>PSDROA Membership Application Form</h1>
+
+    <form id="psdroaForm">
+      <label>Are you a student of Amity Private School Sharjah?</label>
+      <select id="amityCheck" required>
+        <option value="">-- Select an option --</option>
         <option value="yes">Yes</option>
         <option value="no">No</option>
       </select>
+
+      <div id="formFields" style="display:none;">
+        <label>Student ID (must start with S0)</label>
+        <input type="text" id="studentId" placeholder="e.g. S01234" required>
+
+        <label>School Email</label>
+        <input type="email" id="email" placeholder="e.g. name@amitysharjah.ae" required>
+
+        <label>Grade</label>
+        <input type="text" id="grade" placeholder="e.g. 9" required>
+
+        <label>Section</label>
+        <input type="text" id="section" placeholder="e.g. B" required>
+
+        <button type="submit">Submit Application</button>
+      </div>
+    </form>
+
+    <div class="credits">
+      © 2025 Peoples Socialist Democratic Republic of Amityans (PSDROA)<br>
+      <em>Be Free Forever</em>
     </div>
-
-    <div class="form-group hidden" id="studentIdGroup">
-      <label>Student ID <span style="color:red">*</span>:</label>
-      <input type="text" id="studentId" placeholder="Enter your student ID" required>
-    </div>
-
-    <div class="form-group hidden" id="emailGroup">
-      <label>School Email <span style="color:red">*</span>:</label>
-      <input type="email" id="schoolEmail" placeholder="Enter your school email" required>
-    </div>
-
-    <div class="form-group hidden" id="gradeGroup">
-      <label>Grade <span style="color:red">*</span>:</label>
-      <input type="text" id="grade" placeholder="Enter your grade" required>
-    </div>
-
-    <div class="form-group hidden" id="sectionGroup">
-      <label>Section <span style="color:red">*</span>:</label>
-      <input type="text" id="section" placeholder="Enter your section" required>
-    </div>
-
-    <button type="submit" class="hidden" id="submitBtn">Submit</button>
-  </form>
-
-  <div class="credits">
-    &copy; PSDROA – Peoples Socialist Democratic Republic of Amityans
   </div>
-</div>
 
-<script>
-  // Initialize EmailJS
-  emailjs.init("vScrhrDPujPCc5CvP");
+  <script>
+    (function(){
+      emailjs.init("vScrhrDPujPCc5CvP"); // Public Key
+    })();
 
-  const isStudent = document.getElementById("isStudent");
-  const studentIdGroup = document.getElementById("studentIdGroup");
-  const emailGroup = document.getElementById("emailGroup");
-  const gradeGroup = document.getElementById("gradeGroup");
-  const sectionGroup = document.getElementById("sectionGroup");
-  const submitBtn = document.getElementById("submitBtn");
+    const amitySelect = document.getElementById("amityCheck");
+    const formFields = document.getElementById("formFields");
+    const form = document.getElementById("psdroaForm");
 
-  isStudent.addEventListener("change", () => {
-    if (isStudent.value === "yes") {
-      studentIdGroup.classList.remove("hidden");
-    } else {
-      alert("Only students of Amity Private School, Sharjah can apply.");
-      studentIdGroup.classList.add("hidden");
-      emailGroup.classList.add("hidden");
-      gradeGroup.classList.add("hidden");
-      sectionGroup.classList.add("hidden");
-      submitBtn.classList.add("hidden");
-    }
-  });
+    amitySelect.addEventListener("change", () => {
+      if (amitySelect.value === "yes") {
+        formFields.style.display = "block";
+      } else {
+        formFields.style.display = "none";
+        alert("Sorry, only Amity Private School Sharjah students can apply for PSDROA membership.");
+      }
+    });
 
-  const studentIdInput = document.getElementById("studentId");
-  studentIdInput.addEventListener("input", () => {
-    if (studentIdInput.value.startsWith("S0")) {
-      emailGroup.classList.remove("hidden");
-      gradeGroup.classList.remove("hidden");
-      sectionGroup.classList.remove("hidden");
-      submitBtn.classList.remove("hidden");
-    } else {
-      emailGroup.classList.add("hidden");
-      gradeGroup.classList.add("hidden");
-      sectionGroup.classList.add("hidden");
-      submitBtn.classList.add("hidden");
-    }
-  });
+    form.addEventListener("submit", function(e) {
+      e.preventDefault();
 
-  document.getElementById("membershipForm").addEventListener("submit", function(e) {
-    e.preventDefault();
+      const studentId = document.getElementById("studentId").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const grade = document.getElementById("grade").value.trim();
+      const section = document.getElementById("section").value.trim();
 
-    // Check that all visible fields are filled
-    const requiredFields = [studentIdInput, document.getElementById("schoolEmail"), document.getElementById("grade"), document.getElementById("section")];
-    for (const field of requiredFields) {
-      if (field.offsetParent !== null && field.value.trim() === "") {
-        alert("Please fill in all fields before submitting.");
-        field.focus();
+      if (!studentId.startsWith("S0")) {
+        alert("Invalid ID.);
         return;
       }
-    }
 
-    const templateParams = {
-      student_id: studentIdInput.value,
-      email: document.getElementById("schoolEmail").value,
-      grade: document.getElementById("grade").value,
-      section: document.getElementById("section").value
-    };
+      if (!email || !grade || !section) {
+        alert("Please fill in all fields before submitting.");
+        return;
+      }
 
-    emailjs.send('service_kl2pqa8', 'template_9gor05g', templateParams)
-      .then(function(response) {
-         alert("Membership application submitted successfully!");
-         document.getElementById("membershipForm").reset();
-         studentIdGroup.classList.add("hidden");
-         emailGroup.classList.add("hidden");
-         gradeGroup.classList.add("hidden");
-         sectionGroup.classList.add("hidden");
-         submitBtn.classList.add("hidden");
-      }, function(error) {
-         alert("Failed to submit. Please try again.");
+      const templateParams = {
+        student_id: studentId,
+        email: email,
+        grade: grade,
+        section: section
+      };
+
+      emailjs.send("service_kl2pqa8", "template_9gor05g", templateParams)
+      .then(() => {
+        alert("Your application has been submitted successfully. Thank you!");
+        form.reset();
+        formFields.style.display = "none";
+        amitySelect.value = "";
+      }, (error) => {
+        console.error("EmailJS error:", error);
+        alert("There was an error sending your application. Please try again later.");
       });
-  });
-</script>
-
+    });
+  </script>
 </body>
 </html>
