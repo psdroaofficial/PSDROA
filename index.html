@@ -158,7 +158,7 @@
       const section = document.getElementById("section").value.trim();
 
       if (!studentId.startsWith("S0")) {
-        alert("Invalid ID. Your Student ID must start with 'S0'.");
+        alert("Invalid ID.");
         return;
       }
 
@@ -177,7 +177,7 @@
 
       emailjs.send("service_kl2pqa8", "template_9gor05g", templateParams)
         .then(() => {
-          alert("Your PSDROA Membership Application has been submitted successfully!");
+          alert("Your PSDROA Membership Application has been submitted successfully! we will validate and add you to our team");
           form.reset();
           extraFields.style.display = "none";
           amitySelect.value = "";
